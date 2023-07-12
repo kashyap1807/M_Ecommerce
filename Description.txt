@@ -1,0 +1,10 @@
+Fuctionalities - SEO (Search engine optimization) - using this we can rank our website , we use Helmet for it
+               - JWT (Json web token) - using this we can secure out routes
+               - AXIOS (for sneding data from frontend to Backend or server)
+               - toastify , toast , react-hot-toast = used for notification
+               - CONTEXT API = for store data in local and show in other page , and Manage Register & login button after Login
+               - useEffect = is a function  in which we can use multiple functions
+               -useState = for making state and store it's initial values
+               - props and hooks = for sending data and making req to server using axios.method
+               - use Bootstrap and Ant design for CSS
+               - use BrainTree for payment 
