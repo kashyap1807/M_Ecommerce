@@ -40,10 +40,23 @@ app.use("/api/v1/product", productRoutes);
 
 
 //rest api
-// app.use('*',function(req,res){
-//   console.log("...///");
-//     res.sendFile(path.join(__dirname, "../client/build/index.html"));
-// })
+app.use('*',function(req,res){
+    res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
+})
+// const __dirname = path.resolve();
+
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "/client/build")));
+
+//   app.get("*", (req, res) =>
+//       res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+//   );
+// } else {
+//   app.get("/", (req, res) => {
+//     console.log(path.resolve(__dirname, "../client", "build", "index.html"));
+//     res.send("API is running..");
+//   });
+// }
 
 app.listen(PORT, () => {
   console.log(`server ${process.env.DEV_MODE} running on ${PORT}`);
