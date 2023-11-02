@@ -3,7 +3,7 @@ import Layout from '../components/Layout/Layout'
 
 const Policy = () => {
   return (
-    <Layout title={'PrivacyPolicy'}>
+    <Layout title={"PrivacyPolicy"}>
       <div className="row contactus ">
         <div className="col-md-6 ">
           <img
@@ -13,13 +13,21 @@ const Policy = () => {
           />
         </div>
         <div className="col-md-4">
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
+          <p>
+            We use your personal information for the following purposes:1. To
+            process your orders and provide customer support.2. To improve and
+            personalize your experience on the Website.
+          </p>
+          <p>
+            Security We take reasonable measures to protect your personal
+            information from unauthorized access, disclosure, alteration, and
+            destruction.
+          </p>
+          <p>
+            Contact Information If you have questions or concerns about this
+            Privacy Policy or your personal information, please contact us at
+            www.help@Mecommerceapp.com.
+          </p>
         </div>
       </div>
     </Layout>
