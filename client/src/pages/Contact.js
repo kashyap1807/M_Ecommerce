@@ -8,7 +8,7 @@ const Contact = () => {
       <div className="row contactus ">
         <div className="col-md-6 ">
           <img
-            src="/images/contactus.jpeg"
+            src="/contact.jpeg"
             alt="contactus"
             style={{ width: "100%" }}
           />
