@@ -7,4 +7,4 @@ Fuctionalities - SEO (Search engine optimization) - using this we can rank our w
                -useState = for making state and store it's initial values
                - props and hooks = for sending data and making req to server using axios.method
                - use Bootstrap and Ant design for CSS
-               - use BrainTree for payment 
+               - use BrainTree for payment (Card No : 4242 4242 4242 4242)

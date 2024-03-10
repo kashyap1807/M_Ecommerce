@@ -123,7 +123,7 @@ const Home = () => {
     <Layout title={"Home "}>
       {/* banner image */}
       <img
-        src="/images/banner.png"
+        src="/banner.png"
         className="banner-img"
         alt="bannerimage"
         width={"100%"}
