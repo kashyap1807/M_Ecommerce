@@ -143,7 +143,7 @@ const Header = () => {
                 <NavLink
                   to="/cart"
                   className="nav-link"
-                  style={{ fontSize: "20px" }}
+                  style={{ fontSize: "15px" }}
                 >
                   <Badge count={cart?.length} showZero offset={[10, -5]}>
                     Cart

@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import Layout from "./../components/Layout/Layout";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { useCart } from "../context/cart";
+import { toast } from "react-hot-toast";
 import "../styles/ProductDetailsStyles.css";
 
 const ProductDetails = () => {
+  const [cart, setCart] = useCart([]);
   const params = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState({});
@@ -55,7 +58,7 @@ const ProductDetails = () => {
             width={"300px"}
           />
         </div>
-        <div className="col-md-6  product-details-info flex-wrap" >
+        <div className="col-md-6  product-details-info flex-wrap">
           <h1 className="text-center">Product Details</h1>
           <br />
           <h6>Name : {product.name}</h6>
@@ -69,7 +72,17 @@ const ProductDetails = () => {
           </h6>
           <h6>Category : {product?.category?.name}</h6>
           <br />
-          {/* <button className="btn btn-secondary ms-1">ADD TO CART</button> */}
+
+          <button
+            className="btn btn-secondary ms-1"
+            onClick={() => {
+              setCart([...cart, product]);
+              localStorage.setItem("cart", JSON.stringify([...cart, product]));
+              toast.success("Item Added to cart");
+            }}
+          >
+            ADD TO CART
+          </button>
         </div>
       </div>
       <hr />
@@ -88,14 +101,16 @@ const ProductDetails = () => {
               />
               <div className="card-body">
                 <div className="card-name-price">
-                <h5 className="card-title">{p.name}</h5>
-                <p className="card-text">{p.description.substring(0, 30)}...</p>
-                <h5 className="card-title card-price">
-                  {p.price.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
-                </h5>
+                  <h5 className="card-title">{p.name}</h5>
+                  <p className="card-text">
+                    {p.description.substring(0, 30)}...
+                  </p>
+                  <h5 className="card-title card-price">
+                    {p.price.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </h5>
                 </div>
                 <button
                   className="btn btn-primary ms-1"
@@ -103,7 +118,19 @@ const ProductDetails = () => {
                 >
                   More Details
                 </button>
-                {/* <button className="btn btn-secondary ms-1">ADD TO CART</button> */}
+                <button
+                  className="btn btn-secondary ms-1"
+                  onClick={() => {
+                    setCart([...cart, product]);
+                    localStorage.setItem(
+                      "cart",
+                      JSON.stringify([...cart, product])
+                    );
+                    toast.success("Item Added to cart");
+                  }}
+                >
+                  ADD TO CART
+                </button>
               </div>
             </div>
           ))}
