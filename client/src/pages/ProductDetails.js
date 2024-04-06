@@ -121,10 +121,10 @@ const ProductDetails = () => {
                 <button
                   className="btn btn-secondary ms-1"
                   onClick={() => {
-                    setCart([...cart, product]);
+                    setCart([...cart, p]);
                     localStorage.setItem(
                       "cart",
-                      JSON.stringify([...cart, product])
+                      JSON.stringify([...cart, p])
                     );
                     toast.success("Item Added to cart");
                   }}
