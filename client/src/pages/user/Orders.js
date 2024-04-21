@@ -1,18 +1,31 @@
-import React,{useState,useEffect} from 'react'
-import Layout from '../../components/Layout/Layout'
-import UserMenu from '../../components/Layout/UserMenu';
+import React, { useState, useEffect } from "react";
+import Layout from "../../components/Layout/Layout";
+import UserMenu from "../../components/Layout/UserMenu";
 import axios from "axios";
 import { useAuth } from "../../context/auth";
 import moment from "moment";
 
 const Orders = () => {
-
   const [orders, setOrders] = useState([]);
   const [auth, setAuth] = useAuth();
+
   const getOrders = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/auth/orders`);
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/auth/orders`
+      );
       setOrders(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const cancelOrder = async (orderId) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API}/api/v1/orders/${orderId}`
+      );
+      setOrders(orders.filter((order) => order._id !== orderId)); // Remove cancelled order from state
     } catch (error) {
       console.log(error);
     }
@@ -33,26 +46,35 @@ const Orders = () => {
             <h1 className="text-center">All Orders</h1>
             {orders?.map((o, i) => {
               return (
-                <div className="border shadow">
+                <div className="border shadow" key={o._id}>
                   <table className="table">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Buyer</th>
+                        {/* <th scope="col">Buyer</th> */}
                         <th scope="col">Date</th>
                         <th scope="col">Payment</th>
                         <th scope="col">Quantity</th>
+                        <th scope="col">Actions</th> {/* Add Actions column */}
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>{i + 1}</td>
                         <td>{o?.status}</td>
-                        <td>{o?.buyer?.name}</td>
+                        {/* <td>{o?.buyer?.name}</td> */}
                         <td>{moment(o?.createAt).format("LLL")}</td>
                         <td>{o?.payment.success ? "Success" : "Failed"}</td>
                         <td>{o?.products?.length}</td>
+                        <td>
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => cancelOrder(o._id)}
+                          >
+                            Cancel
+                          </button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -84,6 +106,6 @@ const Orders = () => {
       </div>
     </Layout>
   );
-}
+};
 
-export default Orders
+export default Orders;
