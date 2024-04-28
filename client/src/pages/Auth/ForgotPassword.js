@@ -11,15 +11,43 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [answer, setAnswer] = useState("");
-  
-
 
   const navigate = useNavigate();
 
+  // Form validation functions
+  const validateEmail = (email) => {
+    // Regular expression for email validation
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+
+  const validatePassword = (newPassword) => {
+    // Password validation rules (at least 8 characters with at least one uppercase letter, one lowercase letter, one number, and one special character)
+    const re =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return re.test(newPassword);
+  };
 
   //FORM functin
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    
+
+    if (!validatePassword(newPassword)) {
+      toast.error(
+        "Password must be at least 8 characters long with one uppercase letter, one lowercase letter, one number, and one special character"
+      );
+      return;
+    }
+
+
+
     try {
       const res = await axios.post(
         `${process.env.REACT_APP_API}/api/v1/auth/forgot-password`,
@@ -28,7 +56,6 @@ const ForgotPassword = () => {
 
       if (res && res.data.success) {
         toast.success(res.data && res.data.message);
-       
 
         navigate("/login");
       } else {
@@ -43,9 +70,8 @@ const ForgotPassword = () => {
   return (
     <Layout title={"ForgotPassword"}>
       <div className="form-container">
-
-          <h1>RESET PASSWORD</h1>
-          <br />
+        <h1>RESET PASSWORD</h1>
+        <br />
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <input
