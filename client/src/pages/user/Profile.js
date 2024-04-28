@@ -15,6 +15,20 @@ const Profile = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
+  // Form validation functions
+  const validateEmail = (email) => {
+    // Regular expression for email validation
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validatePassword = (password) => {
+    // Password validation rules (at least 8 characters with at least one uppercase letter, one lowercase letter, one number, and one special character)
+    const re =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return re.test(password);
+  };
+
   //get user data
   useEffect(() => {
     const { email, name, phone, address } = auth?.user;
@@ -27,14 +41,31 @@ const Profile = () => {
   // form function
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      toast.error(
+        "Password must be at least 8 characters long with one uppercase letter, one lowercase letter, one number, and one special character"
+      );
+      return;
+    }
+
+
     try {
-      const { data } = await axios.put(`${process.env.REACT_APP_API}/api/v1/auth/profile`, {
-        name,
-        email,
-        password,
-        phone,
-        address,
-      });
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_API}/api/v1/auth/profile`,
+        {
+          name,
+          email,
+          password,
+          phone,
+          address,
+        }
+      );
       if (data?.errro) {
         toast.error(data?.error);
       } else {
