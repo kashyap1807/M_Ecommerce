@@ -12,12 +12,14 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [commentsList, setCommentsList] = useState([]);
 
   //initalp details
   useEffect(() => {
     if (params?.slug) getProduct();
   }, [params?.slug]);
-
 
   //getProduct
   const getProduct = async () => {
@@ -32,7 +34,6 @@ const ProductDetails = () => {
     }
   };
 
-
   //get similar product
   const getSimilarProduct = async (pid, cid) => {
     try {
@@ -45,9 +46,80 @@ const ProductDetails = () => {
     }
   };
 
+  // Add this within the ProductDetails component
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Send the rating to your backend API
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/api/v1/product/add-review`,
+        {
+          productId: product._id,
+          rating: rating,
+          // Include any additional data you need for the review
+        }
+      );
+      // Handle success message or any other logic
+      console.log(response.data);
+      toast.success("Review submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      toast.error("Failed to submit review. Please try again.");
+    }
+  };
+
+  // Handle rating change
+  const handleRatingChange = (value) => {
+    setRating(value);
+  };
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const addComment = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/api/v1/product/add-comment`,
+        {
+          productId: product._id,
+          comment: comment,
+          // Include any additional data you need for the comment
+        }
+      );
+      console.log(response.data);
+      // Refresh comments after adding a new comment
+      getComments();
+      setComment(""); // Clear the comment input
+      toast.success("Comment added successfully!");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      toast.error("Failed to add comment. Please try again.");
+    }
+  };
+
+  const getComments = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/get-comments/${product._id}`
+      );
+      setCommentsList(data?.comments);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Fetch comments when the component mounts
+  useEffect(() => {
+    if (params?.slug) {
+      getProduct();
+      getComments();
+    }
+  }, [params?.slug]);
 
   return (
     <Layout>
+      <hr />
       <div className="row container m-3 p-3">
         <div className="col-md-6">
           <img
@@ -59,6 +131,24 @@ const ProductDetails = () => {
           />
         </div>
         <div className="col-md-6  product-details-info flex-wrap">
+          {/* Add review section here */}
+          {/* <div className="row container m-3 p-3"> */}
+          <div>
+            {[1, 2, 3, 4, 5].map((value) => (
+              <span
+                key={value}
+                onClick={() => handleRatingChange(value)}
+                style={{
+                  cursor: "pointer",
+                  color: value <= rating ? "gold" : "gray",
+                  fontSize: 30,
+                }}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          {/* </div> */}
           <h1 className="text-center">Product Details</h1>
           <br />
           <h6>Name : {product.name}</h6>
@@ -85,9 +175,10 @@ const ProductDetails = () => {
           </button>
         </div>
       </div>
+
       <hr />
       <div className="row container similar-products m-3 p-3">
-        <h4>Similar Products</h4>
+        <h4>Similar Products : </h4>
         {relatedProducts.length < 1 && (
           <p className="text-center">No Similar Products found</p>
         )}
@@ -122,10 +213,7 @@ const ProductDetails = () => {
                   className="btn btn-secondary ms-1"
                   onClick={() => {
                     setCart([...cart, p]);
-                    localStorage.setItem(
-                      "cart",
-                      JSON.stringify([...cart, p])
-                    );
+                    localStorage.setItem("cart", JSON.stringify([...cart, p]));
                     toast.success("Item Added to cart");
                   }}
                 >
@@ -135,6 +223,36 @@ const ProductDetails = () => {
             </div>
           ))}
         </div>
+      </div>
+      <hr />
+      {/* comment section */}
+      <div className="row container m-3 p-3">
+        
+
+        <h4>Leave a Comment :</h4>
+        <textarea
+          value={comment}
+          onChange={handleCommentChange}
+          placeholder="Write your comment here..."
+        ></textarea>
+        <button type="button" className="btn btn-success" onClick={addComment}>
+          Add Comment
+        </button>
+        
+        {/* Display comments */}
+        {commentsList.length > 0 ? (
+          <div>
+            <h4>Comments</h4>
+            {commentsList.map((comment) => (
+              <div key={comment._id}>
+                <p>{comment.text}</p>
+                <p>{comment.author}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No comments yet.</p>
+        )}
       </div>
     </Layout>
   );
